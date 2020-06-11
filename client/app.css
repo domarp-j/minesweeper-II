@@ -6,6 +6,7 @@
 #board {
   width: 640px;
   height: 640px;
+  margin: 0 auto;
 }
 
 #board button {
@@ -15,6 +16,7 @@
 
 #message {
   color: red;
+  text-align: center;
 }
 
 #title {

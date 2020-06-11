@@ -1,11 +1,10 @@
 import React, { useState, useEffect } from "react";
 
+import Board from './Board';
+
 import "./app.css";
 
 const App = () => {
-  const WIDTH = 16;
-  const HEIGHT = 16;
-
   const [board, setBoard] = useState('');
   const [hasError, setErrorState] = useState(false);
 
@@ -22,11 +21,9 @@ const App = () => {
     // Fetch board from API.
     fetch(new Request(route)).then((res) => {
       const result = res.json();
-
       if (!res.ok) {
         setErrorState(true);
       }
-
       return result;
     }).then((data) => {
       setBoard(data.board);
@@ -35,13 +32,12 @@ const App = () => {
 
   return (
     <div>
-      <h1 id="title">... xxx XXX Minesweeper XXX xxx ...</h1>
+      <h1 id="title">minesweeper</h1>
       <div id="message">
-        {hasError && "Something went wrong when trying to build your board."}
+        {hasError
+          && "Something went wrong when trying to build your board. Please check your query parameters and try again."}
       </div>
-      <div id="board">
-        {board}
-      </div>
+      <Board template={board} />
     </div>
   );
 };

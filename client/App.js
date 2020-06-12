@@ -12,9 +12,6 @@ const App = () => {
   // STATE
   // ===============================================
 
-  // The board template, as a 256-char string with x's and dashes.
-  const [board, setBoard] = useState('');
-
   // The board as a 2D matrix.
   const [matrix, setMatrix] = useState([]);
 
@@ -26,6 +23,9 @@ const App = () => {
 
   // Track the number of visited cells to determine if the user has won.
   const [visitedCounter, setVisitedCounter] = useState(0);
+
+  // Reset tracker that flips every time the game should reset.
+  const [resetTracker, setResetTracker] = useState(false);
 
   // Loading state.
   const [loading, setLoading] = useState(true);
@@ -40,7 +40,6 @@ const App = () => {
 
   /**
    * Game setup.
-   *
    * This effect runs on mount and whenever the board is reset.
    */
   useEffect(() => {
@@ -70,18 +69,17 @@ const App = () => {
         setError(true);
         setErrorMessage(data.error);
       } else if (data.board) {
-        setBoard(data.board);
         setMineCount(countMines({ template: data.board }));
         setMatrix(initializeMatrix({ template: data.board }));
       }
     });
-  }, [board]);
+  }, [resetTracker]);
 
   // ===============================================
   // HELPERS
   // ===============================================
 
-  // Given the position of a cell,
+  // Given the position of a cell (row x col),
   // determine if the cell has been visited.
   const isVisitedCell = (row, col) => (
     matrix[row][col].visited
@@ -130,7 +128,7 @@ const App = () => {
   // Reset the game by clearing the board template.
   // This will re-trigger the setup effect above.
   const resetGame = () => {
-    setBoard('');
+    setResetTracker(!resetTracker);
   };
 
   // ===============================================

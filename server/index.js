@@ -40,6 +40,7 @@ app.get('/api', (req, res) => {
 
   // Send random MS board.
   const randomIndex = Math.floor(Math.random() * puzzles.length);
+  console.log(`Sending random board (index ${randomIndex})...`);
   return res.status(200).json({
     board: puzzles[randomIndex]
   });

@@ -1,6 +1,7 @@
 const express = require('express');
 
-const puzzles = require('../server/data/puzzles');
+const puzzles = require('./data/puzzles');
+const { isValidBoard } = require('./utils');
 
 const app = express();
 const SERVER_PORT = 8080;
@@ -12,8 +13,17 @@ app.use(express.static('public'));
  * GET a Minesweeper (MS) board.
  */
 app.get('/api', (req, res) => {
-  // Let the client handle custom MS boards.
-  if (req.query.board) return res.status(204).end();
+  // Validate custom MS boards.
+  if (req.query.board) {
+    if (isValidBoard(req.query.board)) {
+      return res.status(200).json({
+        board: req.query.board
+      });
+    }
+    return res.status(404).json({
+      error: 'We could not build your board. Pleaes check your board query parameter and try again.'
+    });
+  }
 
   // Send MS board based on layoutIndex.
   if (req.query.layoutIndex) {
@@ -24,7 +34,7 @@ app.get('/api', (req, res) => {
     }
 
     return res.status(404).json({
-      errorMessage: 'Puzzle not found at specified index.'
+      error: 'We could not find the puzzle you specified. Please check the layoutIndex query parameter and try again.'
     });
   }
 

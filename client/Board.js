@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 
 const MINE = 'x';
-
 const WIDTH = 16;
 const HEIGHT = 16;
 
@@ -46,6 +45,38 @@ const surroundingMineCount = ({ mat, row, col }) => {
   return count;
 };
 
+/* eslint-disable no-param-reassign */
+const updateCells = ({ mat, row, col }) => {
+  if (row < 0 || row >= WIDTH) return;
+  if (col < 0 || col >= HEIGHT) return;
+
+  if (mat[row][col].visited) return;
+
+  let newValue;
+  if (mat[row][col].value === MINE) {
+    newValue = MINE;
+  } else {
+    newValue = surroundingMineCount({ mat, row, col });
+  }
+
+  mat[row][col] = {
+    visited: true,
+    value: newValue
+  };
+
+  if (newValue === 0) {
+    updateCells({ mat, row: row - 1, col: col - 1 });
+    updateCells({ mat, row: row - 1, col });
+    updateCells({ mat, row: row - 1, col: col + 1 });
+    updateCells({ mat, row, col: col - 1 });
+    updateCells({ mat, row, col: col + 1 });
+    updateCells({ mat, row: row + 1, col: col - 1 });
+    updateCells({ mat, row: row + 1, col });
+    updateCells({ mat, row: row + 1, col: col + 1 });
+  }
+};
+/* eslint-enable no-param-reassign */
+
 const Board = ({ template }) => {
   const [matrix, setMatrix] = useState([]);
 
@@ -69,10 +100,7 @@ const Board = ({ template }) => {
   const revealCell = (row, col) => {
     const mat = JSON.parse(JSON.stringify(matrix));
 
-    mat[row][col] = {
-      visited: true,
-      value: mat[row][col].value === MINE ? MINE : surroundingMineCount({ mat, row, col })
-    };
+    updateCells({ mat, row, col });
 
     setMatrix(mat);
   };

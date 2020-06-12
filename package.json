@@ -16,6 +16,8 @@
   "author": "Samantha Salley",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/core": "^4.10.2",
+    "@material-ui/icons": "^4.9.1",
     "express": "^4.16.3",
     "query-string": "^6.12.1",
     "react": "^16.13.1",

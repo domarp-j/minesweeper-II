@@ -59,8 +59,9 @@ export const updateCells = ({ mat, row, col }) => {
   }
 
   mat[row][col] = {
+    ...mat[row][col],
     visited: true,
-    value: newValue
+    value: newValue,
   };
 
   if (newValue === EMPTY_SPACE) {
@@ -77,3 +78,19 @@ export const updateCells = ({ mat, row, col }) => {
   return 1;
 };
 /* eslint-enable no-param-reassign */
+
+export const initializeMatrix = ({ template }) => {
+  const mat = [[]];
+
+  for (let i = 0; i < template.length; i += 1) {
+    if (mat[mat.length - 1].length === WIDTH) {
+      mat.push([]);
+    }
+    mat[mat.length - 1].push({
+      value: template[i],
+      visited: false,
+    });
+  }
+
+  return mat;
+};

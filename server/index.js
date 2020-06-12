@@ -21,7 +21,7 @@ app.get('/api', (req, res) => {
       });
     }
     return res.status(404).json({
-      error: 'We could not build your board. Please check your board query parameter and try again.'
+      error: 'We could not build your board. Please check your query parameters and try again.'
     });
   }
 
@@ -35,7 +35,7 @@ app.get('/api', (req, res) => {
     }
 
     return res.status(404).json({
-      error: 'We could not find the puzzle you specified. Please check the layoutIndex query parameter and try again.'
+      error: 'We could not find the puzzle you specified. Please check the query parameters and try again.'
     });
   }
 

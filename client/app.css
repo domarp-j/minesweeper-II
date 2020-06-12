@@ -3,38 +3,42 @@
   font-family: monospace;
 }
 
+main {
+  width: 640px;
+  margin: 0 auto;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 auto;
+}
+
+button {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+}
+
 #board {
-  width: 640px;
-  height: 640px;
   margin: 0 auto;
-}
-
-#actions {
-  width: 640px;
-  text-align: right;
-  margin: 0 auto;
-  margin-bottom: 12px;
-}
-
-#actions button {
-  padding: 4px 12px;
-}
-
-#title {
-  text-align: center;
-  margin-bottom: 0;
 }
 
 #error-message {
   color: red;
-  text-align: center;
   margin-top: 20px;
 }
 
-.cell {
-  width: 40px;
-  height: 40px;
-  cursor: pointer;
+#instructions {
+  margin: 0 auto;
+  margin-top: 32px;
+  line-height: 1.5em;
+  font-size: 1.1em;
+}
+
+#game-message {
+  font-size: 1.1em;
 }
 
 .hit-mine {
@@ -42,3 +46,8 @@
   background-color: #DC143C;
   font-weight: bold;
 }
+
+.reset-button {
+  padding: 4px 6px;
+}
+

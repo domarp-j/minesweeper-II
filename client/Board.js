@@ -2,17 +2,19 @@ import React, { useState, useEffect } from "react";
 import PropTypes from 'prop-types';
 
 import {
-  MINE, WIDTH, HEIGHT, updateCells
+  MINE, WIDTH, updateCells
 } from './utils';
 
 const Board = ({ template }) => {
   const [matrix, setMatrix] = useState([]);
   const [lost, setLost] = useState(false);
-  const [resetCounter, setResetCounter] = useState(0);
   const [visitedCounter, setVisitedCounter] = useState(0);
 
   // Create a 2D board matrix based on the provided template.
   useEffect(() => {
+    setVisitedCounter(0);
+    setLost(false);
+
     const mat = [[]];
 
     for (let i = 0; i < template.length; i += 1) {
@@ -26,7 +28,7 @@ const Board = ({ template }) => {
     }
 
     setMatrix(mat);
-  }, [template, resetCounter]);
+  }, [template]);
 
   const revealCell = (row, col) => {
     if (lost) return;
@@ -46,21 +48,12 @@ const Board = ({ template }) => {
     setVisitedCounter(visitedCounter + newVisited);
   };
 
-  const resetGame = () => {
-    setResetCounter(resetCounter + 1);
-    setVisitedCounter(0);
-    setLost(false);
-  };
-
   const isVisitedMine = (row, col) => (
     matrix[row][col].visited && matrix[row][col].value === MINE
   );
 
   return (
     <React.Fragment>
-      <div id="actions">
-        <button type="button" onClick={resetGame}>Restart</button>
-      </div>
       <div id="board">
         {matrix.map((row, i) => (
           <div className="row" key={i}>

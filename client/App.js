@@ -35,14 +35,29 @@ const App = () => {
         setBoard(data.board);
       }
     });
-  }, []);
+  }, [board]);
+
+  const resetGame = () => {
+    setBoard('');
+  };
 
   return (
     <div>
       <h1 id="title">minesweeper</h1>
       {error
-        ? <div id="error-message">{errorMessage || "Something went wrong. Please try again later."}</div>
-        : <Board template={board} />}
+        ? (
+          <div id="error-message">
+            {errorMessage || "Something went wrong. Please try again later."}
+          </div>
+        )
+        : (
+          <React.Fragment>
+            <div id="actions">
+              <button type="button" onClick={resetGame}>Restart</button>
+            </div>
+            <Board template={board} />
+          </React.Fragment>
+        )}
 
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReplayIcon from '@material-ui/icons/Replay';
 
 import {
-  FLAG, MINE, WIDTH, HEIGHT, initializeMatrix, updateCells
+  FLAG, MINE, WIDTH, HEIGHT, initializeMatrix, countMines, updateCells
 } from './utils';
 
 import "./app.css";
@@ -11,6 +11,7 @@ const App = () => {
   const [board, setBoard] = useState('');
   const [matrix, setMatrix] = useState([]);
   const [lost, setLost] = useState(false);
+  const [mineCount, setMineCount] = useState(0);
   const [visitedCounter, setVisitedCounter] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -43,6 +44,7 @@ const App = () => {
         setErrorMessage(data.error);
       } else if (data.board) {
         setBoard(data.board);
+        setMineCount(countMines({ template: data.board }));
         setMatrix(initializeMatrix({ template: data.board }));
       }
     });
@@ -86,7 +88,7 @@ const App = () => {
           <h1 id="title">minesweeper</h1>
           <span id="game-message">
             {lost && "You lost! Restart and try again."}
-            {!lost && visitedCounter === WIDTH * HEIGHT && "You won!"}
+            {!lost && visitedCounter === WIDTH * HEIGHT - mineCount && "You won!"}
           </span>
           <span id="actions">
             <button

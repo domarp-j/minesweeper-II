@@ -96,3 +96,10 @@ export const initializeMatrix = ({ template }) => {
 
   return mat;
 };
+
+export const countMines = ({ template }) => (
+  template.split('').reduce((accum, curr) => {
+    if (curr === MINE) return accum + 1;
+    return accum;
+  }, 0)
+);

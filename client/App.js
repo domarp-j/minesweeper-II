@@ -41,7 +41,7 @@ const App = () => {
     <div>
       <h1 id="title">minesweeper</h1>
       {error
-        ? <div className="message">{errorMessage || "Something went wrong. Please try again later."}</div>
+        ? <div id="error-message">{errorMessage || "Something went wrong. Please try again later."}</div>
         : <Board template={board} />}
 
     </div>

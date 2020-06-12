@@ -52,21 +52,26 @@ const Board = ({ template }) => {
     setLost(false);
   };
 
+  const isVisitedMine = (row, col) => (
+    matrix[row][col].visited && matrix[row][col].value === MINE
+  );
+
   return (
     <React.Fragment>
       <div id="actions">
         <button type="button" onClick={resetGame}>Restart</button>
       </div>
-      <div className="message">
-        {lost && "You lost! Select Restart to try again."}
-        {visitedCounter === WIDTH * HEIGHT && "You win!"}
-      </div>
       <div id="board">
         {matrix.map((row, i) => (
           <div className="row" key={i}>
             {row.map((cell, j) => (
-              <button className="cell" type="button" key={`${i}-${j}`} onClick={() => revealCell(i, j)}>
-                {cell.visited && cell.value}
+              <button
+                className={`cell ${isVisitedMine(i, j) ? 'hit-mine' : ''}`}
+                type="button"
+                key={`${i}-${j}`}
+                onClick={() => revealCell(i, j)}
+              >
+                {cell.visited ? cell.value : <span>&nbsp;</span>}
               </button>
             ))}
           </div>

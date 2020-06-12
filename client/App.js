@@ -8,23 +8,50 @@ import {
 import "./app.css";
 
 const App = () => {
+  // ===============================================
+  // STATE
+  // ===============================================
+
+  // The board template, as a 256-char string with x's and dashes.
   const [board, setBoard] = useState('');
+
+  // The board as a 2D matrix.
   const [matrix, setMatrix] = useState([]);
+
+  // Determine if the player has lost the game.
   const [lost, setLost] = useState(false);
+
+  // Track the number of mines to determine if the user has won.
   const [mineCount, setMineCount] = useState(0);
+
+  // Track the number of visited cells to determine if the user has won.
   const [visitedCounter, setVisitedCounter] = useState(0);
+
+  // Loading state.
   const [loading, setLoading] = useState(true);
+
+  // Error tracking.
   const [error, setError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  // Fetch minesweeper (MS) board data from server.
+  // ===============================================
+  // EFFECTS
+  // ===============================================
+
+  /**
+   * Game setup.
+   *
+   * This effect runs on mount and whenever the board is reset.
+   */
   useEffect(() => {
+    // Reset the game.
     setVisitedCounter(0);
     setLost(false);
 
+    // Parse query params.
     const params = new URLSearchParams(window.location.search);
 
-    // Build API route.
+    // Build the API route.
     let route = '/api';
     if (params.get('board')) {
       route += `?board=${params.get('board')}`;
@@ -32,7 +59,7 @@ const App = () => {
       route += `?layoutIndex=${params.get('layoutIndex')}`;
     }
 
-    // Fetch board from API.
+    // Reach out to API for board data.
     fetch(new Request(route)).then((res) => {
       const result = res.json();
       if (!res.ok) setError(true);
@@ -50,25 +77,43 @@ const App = () => {
     });
   }, [board]);
 
+  // ===============================================
+  // HELPERS
+  // ===============================================
+
+  // Given the position of a cell,
+  // determine if the cell has been visited.
   const isVisitedCell = (row, col) => (
     matrix[row][col].visited
   );
 
+  // Given the position of a cell,
+  // determine if it is a visited mine.
   const isVisitedMine = (row, col) => (
     isVisitedCell(row, col) && matrix[row][col].value === MINE
   );
 
+  // Reveal a cell on click.
   const revealCell = (row, col, event) => {
+    // Do nothing if user has already won or lost.
     if (lost || visitedCounter === WIDTH * HEIGHT - mineCount) return;
 
+    // This is a quick method to copy a multi-dimensional array.
     const mat = JSON.parse(JSON.stringify(matrix));
+
+    // Keep track of the number of cells that become "visited"
+    // based on this cell click.
     let newVisited = 0;
 
+    // Once the user clicks on a cell, the following can occur:
+    // - If a cell is shift-clicked, then it becomes flagged.
+    // - If a cell is clicked and it's a mine, game over!
+    // - If a cell is clicked and its not a mine, we need to display the
+    //   surrounding mine count.
     if (event.shiftKey) {
       mat[row][col].flagged = true;
     } else {
       mat[row][col].flagged = false;
-
       if (mat[row][col].value === MINE) {
         mat[row][col].visited = true;
         setLost(true);
@@ -77,13 +122,20 @@ const App = () => {
       }
     }
 
+    // Finally, update state based on new data.
     setMatrix(mat);
     setVisitedCounter(visitedCounter + newVisited);
   };
 
+  // Reset the game by clearing the board template.
+  // This will re-trigger the setup effect above.
   const resetGame = () => {
     setBoard('');
   };
+
+  // ===============================================
+  // RENDER
+  // ===============================================
 
   return (
     loading ? <main>Loading...</main> : (

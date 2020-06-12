@@ -28,7 +28,6 @@ app.get('/api', (req, res) => {
   // Send MS board based on layoutIndex.
   if (req.query.layoutIndex) {
     if (puzzles[req.query.layoutIndex]) {
-      console.log(`Serving layout at index ${req.query.layoutIndex}...`);
       return res.status(200).json({
         board: puzzles[req.query.layoutIndex]
       });
@@ -41,7 +40,6 @@ app.get('/api', (req, res) => {
 
   // Send random MS board.
   const randomIndex = Math.floor(Math.random() * puzzles.length);
-  console.log(`Serving layout at index ${randomIndex}...`);
   return res.status(200).json({
     board: puzzles[randomIndex]
   });

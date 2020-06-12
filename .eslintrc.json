@@ -12,6 +12,7 @@
     "react/no-array-index-key": "off",
     "import/no-extraneous-dependencies": "off",
     "import/prefer-default-export": "off",
-    "no-nested-ternary": "off"
+    "no-nested-ternary": "off",
+    "no-param-reassign": "off"
   }
 }

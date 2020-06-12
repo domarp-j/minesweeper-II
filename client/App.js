@@ -35,7 +35,7 @@ const App = () => {
         setBoard(data.board);
       }
     });
-  });
+  }, []);
 
   return (
     <div>

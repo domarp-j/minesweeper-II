@@ -1,4 +1,6 @@
 export const MINE = 'x';
+export const EMPTY_SPACE = '-';
+
 export const WIDTH = 16;
 export const HEIGHT = 16;
 
@@ -53,7 +55,7 @@ export const updateCells = ({ mat, row, col }) => {
   if (mat[row][col].value === MINE) {
     newValue = MINE;
   } else {
-    newValue = surroundingMineCount({ mat, row, col });
+    newValue = surroundingMineCount({ mat, row, col }) || EMPTY_SPACE;
   }
 
   mat[row][col] = {
@@ -61,7 +63,7 @@ export const updateCells = ({ mat, row, col }) => {
     value: newValue
   };
 
-  if (newValue === 0) {
+  if (newValue === EMPTY_SPACE) {
     return 1 + updateCells({ mat, row: row - 1, col: col - 1 })
     + updateCells({ mat, row: row - 1, col })
     + updateCells({ mat, row: row - 1, col: col + 1 })

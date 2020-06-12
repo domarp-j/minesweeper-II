@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReplayIcon from '@material-ui/icons/Replay';
 
 import {
-  MINE, WIDTH, HEIGHT, initializeMatrix, updateCells
+  FLAG, MINE, WIDTH, HEIGHT, initializeMatrix, updateCells
 } from './utils';
 
 import "./app.css";
@@ -52,18 +52,23 @@ const App = () => {
     matrix[row][col].visited && matrix[row][col].value === MINE
   );
 
-  const revealCell = (row, col) => {
+  const revealCell = (row, col, event) => {
     if (lost) return;
 
     const mat = JSON.parse(JSON.stringify(matrix));
     let newVisited = 0;
 
-    if (mat[row][col].value === MINE) {
-      mat[row][col].visited = true;
-      newVisited += 1;
-      setLost(true);
+    if (event.shiftKey) {
+      mat[row][col].flagged = true;
     } else {
-      newVisited += updateCells({ mat, row, col });
+      mat[row][col].flagged = false;
+
+      if (mat[row][col].value === MINE) {
+        mat[row][col].visited = true;
+        setLost(true);
+      } else {
+        newVisited += updateCells({ mat, row, col });
+      }
     }
 
     setMatrix(mat);
@@ -109,9 +114,11 @@ const App = () => {
                         className={`cell ${isVisitedMine(i, j) ? 'hit-mine' : ''}`}
                         type="button"
                         key={`${i}-${j}`}
-                        onClick={() => revealCell(i, j)}
+                        onClick={event => revealCell(i, j, event)}
                       >
-                        {cell.visited ? cell.value : <span>&nbsp;</span>}
+                        {cell.flagged
+                          ? FLAG
+                          : (cell.visited ? cell.value : <span>&nbsp;</span>)}
                       </button>
                     ))}
                   </div>
@@ -120,8 +127,8 @@ const App = () => {
               <div id="instructions">
                 <h2>instructions</h2>
                 <p>
-                  You are a minesweeper, looking for mines in a field.
-                  Your job is to find all of the cells that don&apos;t have mines.
+                  You are a minesweeper looking for mines in a field of cells.
+                  Your job is to reveal all of the cells that don&apos;t have mines.
                   But be careful - step on a mine, and you&apos;ll lose!
                 </p>
                 <p>

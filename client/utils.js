@@ -1,5 +1,6 @@
 export const MINE = 'x';
 export const EMPTY_SPACE = '-';
+export const FLAG = 'F';
 
 export const WIDTH = 16;
 export const HEIGHT = 16;
@@ -89,6 +90,7 @@ export const initializeMatrix = ({ template }) => {
     mat[mat.length - 1].push({
       value: template[i],
       visited: false,
+      flagged: false
     });
   }
 

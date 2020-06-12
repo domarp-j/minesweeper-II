@@ -15,14 +15,10 @@ header {
   margin: 0 auto;
 }
 
-button {
+#reset-button {
   width: 40px;
   height: 40px;
   cursor: pointer;
-}
-
-#board {
-  margin: 0 auto;
 }
 
 #error-message {
@@ -39,6 +35,12 @@ button {
 
 #game-message {
   font-size: 1.1em;
+}
+
+.cell {
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
 }
 
 .hit-mine {

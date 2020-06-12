@@ -50,12 +50,16 @@ const App = () => {
     });
   }, [board]);
 
+  const isVisitedCell = (row, col) => (
+    matrix[row][col].visited
+  );
+
   const isVisitedMine = (row, col) => (
-    matrix[row][col].visited && matrix[row][col].value === MINE
+    isVisitedCell(row, col) && matrix[row][col].value === MINE
   );
 
   const revealCell = (row, col, event) => {
-    if (lost) return;
+    if (lost || visitedCounter === WIDTH * HEIGHT - mineCount) return;
 
     const mat = JSON.parse(JSON.stringify(matrix));
     let newVisited = 0;
@@ -113,9 +117,10 @@ const App = () => {
                   <div className="row" key={i}>
                     {row.map((cell, j) => (
                       <button
-                        className={`cell ${isVisitedMine(i, j) ? 'hit-mine' : ''}`}
+                        className={`cell ${isVisitedMine(i, j) ? 'hit-mine' : isVisitedCell(i, j) ? 'hit-cell' : ''}`}
                         type="button"
                         key={`${i}-${j}`}
+                        disabled={lost || visitedCounter === WIDTH * HEIGHT - mineCount}
                         onClick={event => revealCell(i, j, event)}
                       >
                         {cell.flagged
